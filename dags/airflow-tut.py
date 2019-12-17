@@ -6,11 +6,12 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from datetime import datetime, timedelta
 
+# it is discouraged to use current dtg for start_date, but we are just testing
 cur_dtg = datetime.now()
 default_args = {
     'owner': 'Airflow',
     'depends_on_past': False,
-    'start_date': datetime(cur_dtg.year, cur_dtg.month, cur_dtg.day),
+    'start_date': cur_dtg,
     'email': ['xxxxxxx@minerkasch.com'],
     'email_on_failure': True,
     'email_on_retry': False,
@@ -23,7 +24,7 @@ default_args = {
 }
 
 # dag = DAG('airflow-tutorial', default_args=default_args, schedule_interval=timedelta(minutes=2), dagrun_timeout=timedelta(minutes=1))
-dag = DAG('airflow-tutorial', default_args=default_args, schedule_interval=timedelta(hours=1))
+dag = DAG('airflow-tutorial', default_args=default_args, schedule_interval=timedelta(minutes=1), catchup=False)
 
 # t1, t2 and t3 are examples of tasks created by instantiating operators
 t1 = BashOperator(
